@@ -11,15 +11,16 @@
 	lui a5, 0x10010         # Direcci�n de la torre C
 	addi a5, a5, 64         # Asumiendo que la torre C est� 0x30 bytes despu�s de la torre A
 	
-	addi t3, zero, 0 	# Cantidad de discos en A
-	addi t4, zero, 0 	# Cantidad de discos en B
-	addi t5, zero, 0 	# Cantidad de discos en C
+	addi s3, zero, 0 	# Cantidad de discos en A
+	addi s4, zero, 0 	# Cantidad de discos en B
+	addi s5, zero, 0 	# Cantidad de discos en C
+	add t6, zero, a3
 	
 	for:
 		addi t0, t0, 1
-		sw t0, 0(a3)
-		addi a3, a3, 4
-		addi t3, t3, 4
+		sw t0, 0(t6)
+		addi t6, t6, 4
+		addi s3, s3, 4
 		
 		bne t0, a2, for
 	
@@ -33,10 +34,15 @@
 		addi t1, zero, 1
 		bne a2, t1, recursividad
 		
-		lw t0, 0(a3)
-		sw zero, 0(a3)
+		add t6, zero, a3
+		add t6, t6, s3
+		
+		lw t0, -4(t6)
+		sw zero, -4(t6)
 		
 		sw t0, 0(a5)
+		addi s5, s5, 4
+		addi s3, s3, -4
 		
 		jalr ra
 		
@@ -46,30 +52,74 @@
 			sw ra, 0(sp)
 			addi sp, sp, -4
 			sw a2, 0(sp)
+			addi sp, sp, -4
+			sw a3, 0(sp)
+			addi sp, sp, -4
+			sw a4, 0(sp)
+			addi sp, sp, -4
+			sw a5, 0(sp)
 			# mod args -> -1
 			addi a2, a2, -1
+			
+			add t4, zero, a4
+			add t5, zero, a5
+			
+			add a4, zero, t5
+			add a5, zero, t4
 			jal hanoi
 			#pop <-
+			lw a5, 0(sp)
+			addi sp, sp, 4
+			lw a4, 0(sp)
+			addi sp, sp, 4
+			lw a3, 0(sp)
+			addi sp, sp, 4
 			lw a2, 0(sp)
 			addi sp, sp, 4
 			lw ra, 0(sp)
-			addi sp, sp, 4	
 			
+			add t6, zero, a3
+			add t6, t6, s3
 			
+			lw t0, -4(t6)
+			sw zero, -4(t6)
+			
+			sw t0, 0(a5)
+			addi s4, s4, 4
+			addi s3, s3, -4
 					
 			#push -> ra, a2
 			addi sp, sp, -4
 			sw ra, 0(sp)
 			addi sp, sp, -4
 			sw a2, 0(sp)
+			addi sp, sp, -4
+			sw a3, 0(sp)
+			addi sp, sp, -4
+			sw a4, 0(sp)
+			addi sp, sp, -4
+			sw a5, 0(sp)
 			# mod args -> -1
 			addi a2, a2, -1
+			
+			add t3, zero, a3
+			add t5, zero, a5
+			
+			add a3, zero, t5
+			add a5, zero, t3
 			jal hanoi
 			#pop <-
+			lw a5, 0(sp)
+			addi sp, sp, 4
+			lw a4, 0(sp)
+			addi sp, sp, 4
+			lw a3, 0(sp)
+			addi sp, sp, 4
 			lw a2, 0(sp)
 			addi sp, sp, 4
 			lw ra, 0(sp)
-			addi sp, sp, 4	
+			
+			jalr ra
 	endcode: nop
 	
 	
