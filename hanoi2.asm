@@ -1,6 +1,7 @@
 .text
 	# Inicializaci�n de variables
 	addi a2, zero, 3        # N�mero de discos (modificable)
+	addi s9, zero, 3	# numero de discos (no modificable)
 	addi t0, zero, 0        # Iterador para generar los discos
 	
 	# Inicializaci�n de punteros a las torres A, B y C
@@ -48,35 +49,27 @@
 		
 		recursividad:
 			#push -> ra, a2
-			addi sp, sp, -4
-			sw ra, 0(sp)
-			addi sp, sp, -4
-			sw a2, 0(sp)
-			addi sp, sp, -4
-			sw a3, 0(sp)
-			addi sp, sp, -4
-			sw a4, 0(sp)
-			addi sp, sp, -4
-			sw a5, 0(sp)
+			addi sp, sp, -20
+			sw ra, 4(sp)
+			sw a2, 8(sp)
+			sw a3, 12(sp)
+			sw a4, 16(sp)
+			sw a5, 20(sp)
 			# mod args -> -1
 			addi a2, a2, -1
 			
-			add t4, zero, a4
-			add t5, zero, a5
+			add t4, s4, a4
 			
-			add a4, zero, t5
-			add a5, zero, t4
+			add a4,zero,a5 # a4=a5
+    			add a5,zero,t4 # s5=t4(a5)
 			jal hanoi
 			#pop <-
-			lw a5, 0(sp)
-			addi sp, sp, 4
-			lw a4, 0(sp)
-			addi sp, sp, 4
-			lw a3, 0(sp)
-			addi sp, sp, 4
-			lw a2, 0(sp)
-			addi sp, sp, 4
-			lw ra, 0(sp)
+			lw a5, 20(sp)
+			lw a4, 16(sp)
+			lw a3, 12(sp)
+			lw a2, 8(sp)
+			lw ra, 4(sp)
+			addi sp, sp, 20
 			
 			add t6, zero, a3
 			add t6, t6, s3
@@ -89,35 +82,28 @@
 			addi s3, s3, -4
 					
 			#push -> ra, a2
-			addi sp, sp, -4
-			sw ra, 0(sp)
-			addi sp, sp, -4
-			sw a2, 0(sp)
-			addi sp, sp, -4
-			sw a3, 0(sp)
-			addi sp, sp, -4
-			sw a4, 0(sp)
-			addi sp, sp, -4
-			sw a5, 0(sp)
+			addi sp, sp, -20
+			sw ra, 4(sp)
+			sw a2, 8(sp)
+			sw a3, 12(sp)
+			sw a4, 16(sp)
+			sw a5, 20(sp)
 			# mod args -> -1
 			addi a2, a2, -1
 			
-			add t3, zero, a3
-			add t5, zero, a5
+			add t4, s5, a5
 			
-			add a3, zero, t5
-			add a5, zero, t3
+			add a5,zero,t4 # a3=a5
+    			add a3,zero,a4 # s5=t4(a3)
+    			
 			jal hanoi
 			#pop <-
-			lw a5, 0(sp)
-			addi sp, sp, 4
-			lw a4, 0(sp)
-			addi sp, sp, 4
-			lw a3, 0(sp)
-			addi sp, sp, 4
-			lw a2, 0(sp)
-			addi sp, sp, 4
-			lw ra, 0(sp)
+			lw a5, 20(sp)
+			lw a4, 16(sp)
+			lw a3, 12(sp)
+			lw a2, 8(sp)
+			lw ra, 4(sp)
+			addi sp, sp, 20
 			
 			jalr ra
 	endcode: nop

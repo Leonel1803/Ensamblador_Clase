@@ -72,6 +72,7 @@ default:
 	addi sp, sp, 4
 	lw ra, 0(sp)
 	addi sp, sp, 4
+	
 	addi t3, a0, 0
 	
 	jalr ra
